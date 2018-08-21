@@ -109,10 +109,6 @@ ENV/
 .idea/dynamic.xml
 .idea/uiDesigner.xml
 
-# Gradle:пиу
-.idea/gradle.xml
-.idea/libraries
-
 # Mongo Explorer plugin:
 .idea/mongoSettings.xml
 
@@ -144,3 +140,6 @@ logs
 
 # VSCode
 .vscode/
+
+#
+.pytest_cache/
