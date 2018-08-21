@@ -1,5 +1,5 @@
-def fibonacci(n=10):
-    n = int(n)
+def generateFibonacci(length=10):
+    n = int(length)
 
     if n < 0:
         return 0
@@ -14,4 +14,13 @@ def fibonacci(n=10):
     return seq
 
 
-print(fibonacci())
+def main():
+    print(generateFibonacci())
+    print(generateFibonacci(20))
+    print(generateFibonacci(1))
+    print(generateFibonacci(0))
+    print(generateFibonacci(-999))
+
+
+if __name__ == "__main__":
+    main()
