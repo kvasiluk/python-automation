@@ -8,7 +8,7 @@ def generateFibonacci(length=10):
 
     seq = [1, 1]
 
-    for i in range(2, int(n)):
+    for i in range(2, n):
         seq.append(seq[i - 2] + seq[i - 1])
 
     return seq
