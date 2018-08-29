@@ -1,7 +1,6 @@
 import json
 import pytest
 
-from api_tests.common.http_request import BaseHttp
 from .base_test import BaseTest
 
 issue_url = 'rest/api/2/issue'
