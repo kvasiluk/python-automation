@@ -81,11 +81,11 @@ class BaseHttp(object):
 
         return response
 
-    def update_auth_cookie(self, response):
+    def update_auth_header(self, response):
         if response and isinstance(response, basestring):
-            self.session.cookies.update({'JSESSIONID': response})
+            self.session.headers.update({'Cookie': 'JSESSIONID=%s' % response})
         elif response.json()['session']['name'] == 'JSESSIONID':
-            self.session.cookies.update({'JSESSIONID': response.json()['session']['value']})
+            self.session.headers.update({'Cookie': 'JSESSIONID=%s' % response.json()['session']['value']})
 
     def _make_url(self, url_part):
         return '%s/%s' % (self.base_url, url_part)
