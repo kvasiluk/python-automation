@@ -25,6 +25,27 @@ class BaseTest(object):
 
         self.http.update_auth_header(login_resp)
 
+    @pytest.fixture()
+    def create_issue_for_update(self):
+        """Creates a new issue at setup, yields its key, deletes issue on teardown"""
+        issue_data = {
+            "fields": {
+                "project":
+                    {
+                        "key": "AQAPYTHON"
+                    },
+                "summary": BaseTest().random_string(20),
+                "description": BaseTest().random_string(50),
+                "issuetype": {
+                    "name": "Bug"
+                }
+            }
+        }
+        issue_key = self.http.post("rest/api/2/issue", json.dumps(issue_data)).json()["key"]
+        yield issue_key
+        self.http.delete("rest/api/2/issue/%s" % issue_key)
+
+
     @staticmethod
     def random_string(length):
         return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(length))
