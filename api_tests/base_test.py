@@ -3,11 +3,15 @@ import string
 import pytest
 import json
 
+from tests_data.tests_data import TestsData
+from .utils.jsonschemaerror import check_json
+
 from api_tests.common.http_request import BaseHttp
 
 
 class BaseTest(object):
     http = BaseHttp()
+    data = TestsData()
 
     @pytest.fixture
     def clear_session(self):
@@ -45,7 +49,21 @@ class BaseTest(object):
         yield issue_key
         self.http.delete("rest/api/2/issue/%s" % issue_key)
 
-
     @staticmethod
     def random_string(length):
         return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(length))
+
+    def verify_json_schema(self, json_object, schema, iter_=False):
+        """
+        :param json_object: dict-like JSON object to verify
+         :type json_object: dict
+        :param schema: json schema object
+         :type schema: dict
+        :param iter_: iter over list
+        :return:
+        """
+        if iter_:
+            for js in json_object:
+                check_json(js, schema)
+        else:
+            check_json(json_object, schema)

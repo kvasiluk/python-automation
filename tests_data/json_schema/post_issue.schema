@@ -1,0 +1,42 @@
+{
+  "definitions": {},
+  "type": "object",
+  "title": "The Root Schema",
+  "required": [
+    "id",
+    "key",
+    "self"
+  ],
+  "properties": {
+    "id": {
+      "$id": "#/properties/id",
+      "type": "string",
+      "title": "The Id Schema",
+      "default": "",
+      "examples": [
+        "21310"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "key": {
+      "$id": "#/properties/key",
+      "type": "string",
+      "title": "The Key Schema",
+      "default": "",
+      "examples": [
+        "AQAPYTHON-1401"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "self": {
+      "$id": "#/properties/self",
+      "type": "string",
+      "title": "The Self Schema",
+      "default": "",
+      "examples": [
+        "http://jira.hillel.it:8080/rest/api/2/issue/21310"
+      ],
+      "pattern": "^(.*)$"
+    }
+  }
+}

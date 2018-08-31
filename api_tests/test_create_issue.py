@@ -51,3 +51,5 @@ class TestCreateIssue(BaseTest):
         post_issue_resp = self.http.post(Config.issue_url, json.dumps(issue_data))
 
         assert post_issue_resp.status_code == response_code, 'Failed to post issue'
+        if response_code == 201:
+            self.verify_json_schema(post_issue_resp.json(), self.data.json_schema_by_name('post_issue'))
