@@ -1,9 +1,10 @@
 import requests
 from requests.compat import basestring
 
-DEFAULT_HEADER = {'Content-Type': 'application/json'}
-DEFAULT_TIMEOUT = 15
+from api_tests.utils.config import Config
 
+DEFAULT_HEADER = {'Content-Type': 'application/json'}
+DEFAULT_TIMEOUT = Config.timeout
 
 class BaseHttp(object):
     """
@@ -13,7 +14,7 @@ class BaseHttp(object):
     def __init__(self, headers=None, cookies=None):
         self.session = requests.session()
         self.session.headers.update(DEFAULT_HEADER)
-        self.base_url = 'http://jira.hillel.it:8080'
+        self.base_url = Config.jira_url
         if headers:
             self.session.headers.update(headers)
         if cookies:

@@ -2,8 +2,7 @@ import json
 import pytest
 
 from .base_test import BaseTest
-
-issue_url = 'rest/api/2/issue'
+from .utils.config import Config
 
 
 class TestCreateIssue(BaseTest):
@@ -49,6 +48,6 @@ class TestCreateIssue(BaseTest):
          }, 400),
     ])
     def test_create_issue(self, issue_data, response_code):
-        post_issue_resp = self.http.post(issue_url, json.dumps(issue_data))
+        post_issue_resp = self.http.post(Config.issue_url, json.dumps(issue_data))
 
         assert post_issue_resp.status_code == response_code, 'Failed to post issue'

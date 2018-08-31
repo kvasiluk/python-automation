@@ -3,8 +3,7 @@ import json
 import pytest
 
 from .base_test import BaseTest
-
-issue_url_base = 'rest/api/2/issue'
+from .utils.config import Config
 
 
 class TestUpdateIssue(BaseTest):
@@ -26,7 +25,7 @@ class TestUpdateIssue(BaseTest):
          }, 204),
     ])
     def test_update_issue(self, issue_data, response_code, create_issue_for_update):
-        issue_url = "%s/%s" % (issue_url_base, create_issue_for_update)
+        issue_url = "%s/%s" % (Config.issue_url, create_issue_for_update)
         update_issue_resp = self.http.put(issue_url, json.dumps(issue_data))
 
         assert update_issue_resp.status_code == response_code, 'Failed to update issue'
