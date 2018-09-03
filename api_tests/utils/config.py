@@ -20,4 +20,6 @@ class Config(object):
     username = config.get('USER', 'username')
     password = config.get('USER', 'password')
 
+    project_key = config.get('APP', 'project_key')
+
     json_schemas_path = config.get('TEST', 'json_schemas_path')

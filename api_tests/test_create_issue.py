@@ -1,51 +1,16 @@
 import json
 import pytest
 
-from .base_test import BaseTest
+from .base_test import BaseTest, random_string
 from .utils.config import Config
+from tests_data.json_object.json_data import create_issue_json
 
 
 class TestCreateIssue(BaseTest):
     @pytest.mark.parametrize("issue_data,response_code", [
-        ({
-            "fields": {
-                "project":
-                    {
-                        "key": "AQAPYTHON"
-                    },
-                "summary": BaseTest().random_string(20),
-                "description": BaseTest().random_string(50),
-                "issuetype": {
-                    "name": "Bug"
-                }
-            }
-        }, 201),
-        ({
-             "fields": {
-                 "project":
-                     {
-                         "key": "AQAPYTHON"
-                     },
-                 "summary": '',
-                 "description": '',
-                 "issuetype": {
-                     "name": ""
-                 }
-             }
-         }, 400),
-        ({
-             "fields": {
-                 "project":
-                     {
-                         "key": "AQAPYTHON"
-                     },
-                 "summary": BaseTest().random_string(300),
-                 "description": BaseTest().random_string(3000),
-                 "issuetype": {
-                     "name": "Bug"
-                 }
-             }
-         }, 400),
+        (create_issue_json(random_string(10), random_string(20), 'Bug'), 201),
+        (create_issue_json('', '', ''), 400),
+        (create_issue_json(random_string(300), random_string(3000), 'Bug'), 400),
     ])
     def test_create_issue(self, issue_data, response_code):
         post_issue_resp = self.http.post(Config.issue_url, json.dumps(issue_data))

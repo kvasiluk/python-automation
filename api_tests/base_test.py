@@ -9,6 +9,10 @@ from .utils.jsonschemaerror import check_json
 from api_tests.common.http_request import BaseHttp
 
 
+def random_string(length):
+    return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(length))
+
+
 class BaseTest(object):
     http = BaseHttp()
     data = TestsData()
@@ -38,8 +42,8 @@ class BaseTest(object):
                     {
                         "key": "AQAPYTHON"
                     },
-                "summary": BaseTest().random_string(20),
-                "description": BaseTest().random_string(50),
+                "summary": random_string(20),
+                "description": random_string(50),
                 "issuetype": {
                     "name": "Bug"
                 }
@@ -48,10 +52,6 @@ class BaseTest(object):
         issue_key = self.http.post("rest/api/2/issue", json.dumps(issue_data)).json()["key"]
         yield issue_key
         self.http.delete("rest/api/2/issue/%s" % issue_key)
-
-    @staticmethod
-    def random_string(length):
-        return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(length))
 
     def verify_json_schema(self, json_object, schema, iter_=False):
         """
