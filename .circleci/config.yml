@@ -48,7 +48,7 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            python -m pytest api_tests -n 4
+            python -m pytest api_tests tests/test_random.py -n 4 --reruns 2 -v
 
       - store_artifacts:
           path: test-reports
