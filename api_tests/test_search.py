@@ -1,7 +1,7 @@
 import pytest
 
 from .base_test import BaseTest
-from .utils.config import Config
+from utils.config import Config
 from .constants import *
 
 

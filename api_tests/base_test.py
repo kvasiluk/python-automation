@@ -3,10 +3,10 @@ import string
 import pytest
 import json
 
-from api_tests.utils.config import Config
+from utils.config import Config
 from tests_data.json_object.json_data import create_issue_json
 from tests_data.tests_data import TestsData
-from .utils.jsonschemaerror import check_json
+from utils.jsonschemaerror import check_json
 
 from api_tests.common.http_request import BaseHttp
 

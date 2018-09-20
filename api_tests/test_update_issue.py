@@ -3,7 +3,7 @@ import json
 import pytest
 
 from .base_test import BaseTest
-from .utils.config import Config
+from utils.config import Config
 from tests_data.json_object.json_data import update_issue_json
 
 

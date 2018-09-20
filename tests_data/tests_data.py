@@ -1,7 +1,7 @@
 import os
 import json
 
-from api_tests.utils.config import Config
+from utils.config import Config
 
 
 class TestsData(object):

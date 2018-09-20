@@ -1,7 +1,7 @@
 import requests
 from requests.compat import basestring
 
-from api_tests.utils.config import Config
+from utils.config import Config
 
 DEFAULT_HEADER = {'Content-Type': 'application/json'}
 DEFAULT_TIMEOUT = Config.timeout

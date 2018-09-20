@@ -3,3 +3,5 @@ requests==2.19.1
 jsonschema==2.6.0
 pytest-xdist==1.23.0
 pytest-rerunfailures==4.1
+selenium==3.14.0
+webdriver-manager==1.7
