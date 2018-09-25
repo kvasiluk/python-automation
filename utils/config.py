@@ -20,6 +20,7 @@ class Config(object):
 
     login_url = config.get('ENVIRONMENT', 'login_url')
     dashboard_url = config.get('ENVIRONMENT', 'dashboard_url')
+    create_issue_url = config.get('ENVIRONMENT', 'create_issue_url')
 
     username = config.get('USER', 'username')
     password = config.get('USER', 'password')

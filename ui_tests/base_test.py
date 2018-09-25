@@ -14,6 +14,7 @@ class BaseTest(object):
 
     @pytest.fixture
     def login(self):
+        self.pages.login_page.go_to()
         self.pages.login_page.login()
 
     @property

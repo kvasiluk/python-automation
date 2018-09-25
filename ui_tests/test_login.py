@@ -20,4 +20,4 @@ class TestLogin(BaseTest):
             assert exp_error_message in login_page.get_error_message(), "Unexpected failed login error message"
         else:
             assert self.pages.dashboard_page.is_dashboard_page(), "User is not moved to dashboard page after login"
-            assert self.pages.dashboard_page.is_authenticated(), "Failed to login"
+            assert self.pages.topbar_menu.is_authenticated(), "Failed to login"
