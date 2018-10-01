@@ -33,3 +33,6 @@ class Config(object):
     headless = config.getboolean('TEST', 'headless')
     fullscreen = config.getboolean('TEST', 'fullscreen')
     browser_resolution = config.get('TEST', 'browser_resolution')
+
+    search_string_1 = config.get('TEST', 'search_string_1')
+    search_string_2 = config.get('TEST', 'search_string_2')

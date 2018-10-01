@@ -75,9 +75,16 @@ def create_and_clean_issues():
     login_resp = http.post('rest/auth/1/session', payload)
     http.update_auth_header(login_resp)
 
-    for i in range(10):
+    for i in range(5):
+        issue_data = create_issue_json(random_string(10), Config.search_string_1, 'Bug')
+        http.post(Config.issue_url, json.dumps(issue_data))
+
+    for i in range(4):
         issue_data = create_issue_json(random_string(10), random_string(20), 'Bug')
         http.post(Config.issue_url, json.dumps(issue_data))
+
+    issue_data = create_issue_json(random_string(10), Config.search_string_2, 'Bug')
+    http.post(Config.issue_url, json.dumps(issue_data))
 
     yield
 

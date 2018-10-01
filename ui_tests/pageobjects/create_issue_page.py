@@ -14,7 +14,8 @@ dialog_header = (By.CSS_SELECTOR, ".jira-dialog-heading")
 project_edit = (By.ID, "project-field")
 issue_type_edit = (By.ID, "issuetype-field")
 summary_edit = (By.ID, "summary")
-description_edit = (By.ID, "description-wiki-edit")
+description_frame = (By.CSS_SELECTOR, "#description-wiki-edit iframe")
+description_body = (By.ID, "tinymce")
 create_button = (By.ID, "create-issue-submit")
 cancel_button = (By.CSS_SELECTOR, "a.cancel")
 summary_error_label = (By.CSS_SELECTOR, ".error")
@@ -49,8 +50,8 @@ class CreateIssuePage(BasePage):
         return self.wait.until(ec.element_to_be_clickable(summary_edit))
 
     @property
-    def description_edit(self):
-        return self.wait.until(ec.element_to_be_clickable(description_edit))
+    def description_body(self):
+        return self.wait.until(ec.element_to_be_clickable(description_body))
 
     @property
     def create_button(self):
@@ -79,8 +80,11 @@ class CreateIssuePage(BasePage):
         self.issue_type_edit.send_keys(issue_type + Keys.RETURN)
         self.summary_edit.clear()
         self.summary_edit.send_keys(summary)
-        # self.description_edit.clear()
-        # self.description_edit.send_keys(desc)
+
+        self.driver.switch_to.frame(self.driver.find_element(*description_frame))
+        self.description_body.clear()
+        self.description_body.send_keys(desc)
+        self.driver.switch_to.default_content()
 
     def create_issue(self, issue_type=IssueType.BUG, summary="Default", desc="Default"):
         self.fill_with(issue_type, summary, desc)
