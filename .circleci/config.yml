@@ -27,12 +27,24 @@ jobs:
           key: v1-dependencies-{{ checksum "requirements.txt" }}
 
       - run:
-          name: run tests
+          name: prepare test data
           command: |
             . venv/bin/activate
             python -m pytest -m prepare
+            when: always
+
+      - run:
+          name: run tests
+          command: |
+            . venv/bin/activate
             python -m pytest ui_tests --ignore=ui_tests/test_prepare_data.py -n 4 --dist=loadfile --reruns 2 -v
+
+      - run:
+          name: clean test data
+          command: |
+            . venv/bin/activate
             python -m pytest -m clean
+            when: always
 
       - store_artifacts:
           path: test-reports
