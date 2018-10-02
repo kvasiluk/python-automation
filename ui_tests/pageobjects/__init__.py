@@ -1,5 +1,6 @@
 from ui_tests.pageobjects.create_issue_page import CreateIssuePage
 from ui_tests.pageobjects.dashboard_page import DashboardPage
+from ui_tests.pageobjects.issue_page import IssuePage
 from ui_tests.pageobjects.login_page import LoginPage
 from ui_tests.pageobjects.search_results_page import SearchResultsPage
 from ui_tests.pageobjects.topbar_menu import TopbarMenu
@@ -28,3 +29,7 @@ class Pages(object):
     @property
     def search_results_page(self):
         return SearchResultsPage(self.driver)
+
+    @property
+    def issue_page(self):
+        return IssuePage(self.driver)

@@ -30,7 +30,9 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            python -m pytest api_tests ui_tests tests/test_random.py -n 4 --reruns 2 -v
+            python -m pytest -m prepare
+            python -m pytest ui_tests --ignore=ui_tests/test_prepare_data.py -n 4 --dist=loadfile --reruns 2 -v
+            python -m pytest -m clean
 
       - store_artifacts:
           path: test-reports

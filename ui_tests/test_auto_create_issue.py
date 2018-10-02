@@ -1,17 +1,15 @@
-import json
-
 import pytest
 
-from api_tests.base_test import random_string
 from ui_tests.base_test import BaseTest
+from ui_tests.constants import *
 
 
 class TestCreateIssue(BaseTest):
     @pytest.mark.usefixtures("login")
     @pytest.mark.parametrize("summary,description,issue_type,fail_expected", [
-        (random_string(10), random_string(20), 'Bug', False),
+        (summary_short, description_short, 'Bug', False),
         ('', '', '', True),
-        (random_string(300), random_string(3000), 'Bug', True),
+        (summary_long, description_long, 'Bug', True),
     ])
     def test_create_issue(self, summary, description, issue_type, fail_expected):
         self.pages.dashboard_page.click_create()

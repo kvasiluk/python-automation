@@ -16,6 +16,9 @@ http = BaseHttp()
 def up_browser(request):
     """ SetUp/TearDown selenium driver """
 
+    if 'nobrowser' in request.keywords:
+        return
+
     d = None
     if Config.browser == 'chrome':
         options = webdriver.ChromeOptions()
@@ -63,17 +66,11 @@ def driver(request, up_browser):
     return d
 
 
-@pytest.fixture(scope='class', autouse=True)
-def create_and_clean_issues():
-    """
-    At setup creates 10 issues.
-    At teardown deletes all issues in a testing project created by testing user
-    """
+@pytest.fixture()
+def create_issues():
+    """Create 10 issues"""
 
-    # set authentication cookie
-    payload = json.dumps({'username': 'Kirill_Vasiluk', 'password': 'Kirill_Vasiluk'}, ensure_ascii=False)
-    login_resp = http.post('rest/auth/1/session', payload)
-    http.update_auth_header(login_resp)
+    set_auth_cookie()
 
     for i in range(5):
         issue_data = create_issue_json(random_string(10), Config.search_string_1, 'Bug')
@@ -86,9 +83,31 @@ def create_and_clean_issues():
     issue_data = create_issue_json(random_string(10), Config.search_string_2, 'Bug')
     http.post(Config.issue_url, json.dumps(issue_data))
 
-    yield
 
+@pytest.fixture()
+def clean_issues():
+    """Delete all issues created by testing user"""
+
+    set_auth_cookie()
     search_jql = "?jql=project={}%20AND%20creator={}".format(Config.project_key, Config.username)
     search_resp = http.get(Config.search_url + search_jql)
     for issue in search_resp.json()["issues"]:
         http.delete("rest/api/2/issue/%s" % issue["key"])
+
+
+@pytest.fixture()
+def create_issue_for_update():
+    """Creates a new issue at setup, yields its key, deletes issue on teardown"""
+
+    set_auth_cookie()
+    issue_data = create_issue_json(random_string(10), random_string(20), 'Bug')
+    issue_key = http.post("rest/api/2/issue", json.dumps(issue_data)).json()["key"]
+    yield issue_key
+    http.delete("rest/api/2/issue/%s" % issue_key)
+
+
+def set_auth_cookie():
+    # set authentication cookie
+    payload = json.dumps({'username': 'Kirill_Vasiluk', 'password': 'Kirill_Vasiluk'}, ensure_ascii=False)
+    login_resp = http.post('rest/auth/1/session', payload)
+    http.update_auth_header(login_resp)

@@ -17,6 +17,6 @@ class TestSearch(BaseTest):
 
         if results:
             res_count = self.pages.search_results_page.result_count()
-            assert res_count == results, "Found {} issues, expected was {}".format(res_count, results)
+            assert results == res_count, "Found {} issues, expected was {}".format(res_count, results)
         else:
             assert self.pages.search_results_page.is_no_issues_found(), "Issues found when expecting no results"
