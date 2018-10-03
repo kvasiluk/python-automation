@@ -30,6 +30,7 @@ jobs:
           name: prepare test data
           command: |
             . venv/bin/activate
+            python -m pytest -m clean
             python -m pytest -m prepare
           when: always
 
