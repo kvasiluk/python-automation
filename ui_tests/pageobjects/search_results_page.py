@@ -16,9 +16,11 @@ class SearchResultsPage(BasePage):
         self.url = "{}//{}".format(Config.jira_url, Config.dashboard_url)
 
     # properties
+    @property
     def issues(self):
         return self.driver.find_elements(*issue_items)
 
+    @property
     def result_count(self):
         return len(self.driver.find_elements(*issue_items))
 
@@ -30,3 +32,9 @@ class SearchResultsPage(BasePage):
         wait = WebDriverWait(self.driver, 10)
         if not self.is_no_issues_found():
             wait.until(ec.presence_of_all_elements_located(issue_items))
+
+    def validate_results(self, results=None):
+        if results:
+            return self.result_count == results
+
+        return self.is_no_issues_found()

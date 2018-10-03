@@ -15,8 +15,5 @@ class TestSearch(BaseTest):
         self.pages.topbar_menu.search(search_string)
         self.pages.search_results_page.wait_for_results()
 
-        if results:
-            res_count = self.pages.search_results_page.result_count()
-            assert results == res_count, "Found {} issues, expected was {}".format(res_count, results)
-        else:
-            assert self.pages.search_results_page.is_no_issues_found(), "Issues found when expecting no results"
+        assert self.pages.search_results_page.validate_results(results), \
+            "Found {} issues, expected was {}".format(self.pages.search_results_page.result_count, results)
