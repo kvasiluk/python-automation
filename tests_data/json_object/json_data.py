@@ -1,4 +1,4 @@
-from api_tests.utils.config import Config
+from utils.config import Config
 
 
 def create_issue_json(summary, description, type):

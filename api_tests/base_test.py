@@ -3,8 +3,10 @@ import string
 import pytest
 import json
 
+from utils.config import Config
+from tests_data.json_object.json_data import create_issue_json
 from tests_data.tests_data import TestsData
-from .utils.jsonschemaerror import check_json
+from utils.jsonschemaerror import check_json
 
 from api_tests.common.http_request import BaseHttp
 
@@ -52,6 +54,23 @@ class BaseTest(object):
         issue_key = self.http.post("rest/api/2/issue", json.dumps(issue_data)).json()["key"]
         yield issue_key
         self.http.delete("rest/api/2/issue/%s" % issue_key)
+
+    @pytest.fixture(scope='class', autouse=True)
+    def create_and_clean_issues(self):
+        """
+        At setup creates 10 issues.
+        At teardown deletes all issues in a testing project created by testing user
+        """
+        for i in range(10):
+            issue_data = create_issue_json(random_string(10), random_string(20), 'Bug')
+            self.http.post(Config.issue_url, json.dumps(issue_data))
+
+        yield
+
+        search_jql = "?jql=project={}%20AND%20creator={}".format(Config.project_key, Config.username)
+        search_resp = self.http.get(Config.search_url + search_jql)
+        for issue in search_resp.json()["issues"]:
+            self.http.delete("rest/api/2/issue/%s" % issue["key"])
 
     def verify_json_schema(self, json_object, schema, iter_=False):
         """

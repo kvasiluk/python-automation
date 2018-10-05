@@ -2,7 +2,7 @@ import json
 import pytest
 
 from .base_test import BaseTest, random_string
-from .utils.config import Config
+from utils.config import Config
 from tests_data.json_object.json_data import create_issue_json
 
 
