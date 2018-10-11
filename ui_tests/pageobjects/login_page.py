@@ -5,6 +5,8 @@ from utils.config import Config
 
 
 # Locators
+from utils.reporting import screenshot
+
 login_edit = (By.ID, "login-form-username")
 password_edit = (By.ID, "login-form-password")
 login_button = (By.ID, "login-form-submit")
@@ -44,6 +46,7 @@ class LoginPage(BasePage):
         self.password_edit.send_keys(password)
         self.email_edit.click()
 
+    @screenshot
     def login(self, username=Config.username, password=Config.password):
         self.fill_credentials(username, password)
         self.login_button.click()

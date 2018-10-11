@@ -10,6 +10,8 @@ from ui_tests.pageobjects.base_page import BasePage
 from utils.config import Config
 
 # Locators
+from utils.reporting import screenshot
+
 dialog_header = (By.CSS_SELECTOR, ".jira-dialog-heading")
 project_edit = (By.ID, "project-field")
 issue_type_edit = (By.ID, "issuetype-field")
@@ -86,6 +88,7 @@ class CreateIssuePage(BasePage):
         self.description_body.send_keys(desc)
         self.driver.switch_to.default_content()
 
+    @screenshot
     def create_issue(self, issue_type=IssueType.BUG, summary="Default", desc="Default"):
         self.fill_with(issue_type, summary, desc)
         self.create_button.click()
