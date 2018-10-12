@@ -10,7 +10,7 @@ step = allure.step
 @allure.feature("Search")
 class TestSearch(BaseTest):
     @pytest.mark.ui
-    @pytest.mark.usefixtures("login")
+    @pytest.mark.usefixtures("login", "create_issues")
     @pytest.mark.parametrize("search_string,results", [
         (Config.search_string_1, 5),
         (Config.search_string_2, 1),

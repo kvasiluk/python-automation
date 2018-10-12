@@ -21,12 +21,13 @@ def screenshot(func):
         result = None
         try:
             result = func(*args, **kwargs)
-            time.sleep(0.3)
-            png = args[0].driver.get_screenshot_as_png()
-            attach_png(png)
         except Exception:
             _type, _value, _traceback = sys.exc_info()
             raise _type(''.join(traceback.format_exception(_type, _value, _traceback)))
+        finally:
+            time.sleep(0.3)
+            png = args[0].driver.get_screenshot_as_png()
+            attach_png(png)
         return result
 
     return wraps

@@ -10,7 +10,7 @@ step = allure.step
 @allure.feature("Create issue")
 class TestCreateIssue(BaseTest):
     @pytest.mark.ui
-    @pytest.mark.usefixtures("login")
+    @pytest.mark.usefixtures("login", "clean_issues")
     @pytest.mark.parametrize("summary,description,issue_type", [
         (summary_short, description_short, 'Bug'),
     ])

@@ -27,14 +27,6 @@ jobs:
           key: v1-dependencies-{{ checksum "requirements.txt" }}
 
       - run:
-          name: prepare test data
-          command: |
-            . venv/bin/activate
-            python -m pytest -m clean
-            python -m pytest -m prepare
-          when: always
-
-      - run:
           name: run tests
           command: |
             . venv/bin/activate

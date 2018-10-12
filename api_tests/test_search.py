@@ -11,6 +11,7 @@ step = allure.step
 @allure.feature("Search")
 class TestSearch(BaseTest):
     @pytest.mark.api
+    @pytest.mark.usefixtures("create_issues")
     @pytest.mark.parametrize("search_jql,results", [
         (search_jql_five, 5),
         (search_jql_one, 1),
