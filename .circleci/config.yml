@@ -21,6 +21,17 @@ jobs:
             . venv/bin/activate
             pip install -r requirements.txt
 
+      - run:
+          name: install allure
+          command: |
+            echo 'deb http://deb.debian.org/debian jessie-backports main' | sudo tee --append /etc/apt/sources.list.d/jessie-backports.list
+            sudo apt update -y
+            sudo apt install --target-release jessie-backports openjdk-8-jre-headless ca-certificates-java -y
+
+            curl -o ~/allure-2.6.0.tgz -Ls https://dl.bintray.com/qameta/generic/io/qameta/allure/allure/2.6.0/allure-2.6.0.tgz
+            sudo tar -zxvf ~/allure-2.6.0.tgz -C /opt/
+            sudo ln -s /opt/allure-2.6.0/bin/allure /usr/bin/allure
+
       - save_cache:
           paths:
             - ./venv
@@ -38,6 +49,12 @@ jobs:
           command: |
             . venv/bin/activate
             python -m pytest -m clean
+          when: always
+
+      - run:
+          name: generate allure report
+          command: |
+            allure generate ./test-results/allure -o ./test-results/html_report
           when: always
 
       - store_artifacts:
