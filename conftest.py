@@ -26,7 +26,7 @@ def up_browser(request):
             options.add_argument("--headless")
         if Config.fullscreen:
             options.add_argument("--kiosk")
-        # options.add_argument("--no-sandbox")
+        options.add_argument("--no-sandbox")
         options.add_argument('--ignore-certificate-errors')
         options.add_argument("--disable-popup-blocking")
         options.add_argument("--disable-dev-shm-usage")
