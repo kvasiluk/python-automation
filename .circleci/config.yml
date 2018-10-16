@@ -54,7 +54,7 @@ jobs:
       - run:
           name: generate allure report
           command: |
-            allure generate ./test-results/allure -o ./test-results/html_report
+            allure generate ./test_results/allure -o ./test_results/html_report
           when: always
 
       - store_artifacts:
