@@ -105,6 +105,9 @@ def clean_issues():
 def delete_issue_after_create(request):
     yield
 
+    if not request.node.created_issue_key:
+        return
+
     set_auth_cookie()
     http.delete("rest/api/2/issue/%s" % request.node.created_issue_key)
 

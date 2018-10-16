@@ -16,6 +16,8 @@ class TestCreateIssue(BaseTest):
     ])
     def test_create_issue(self, summary, description, issue_type, request):
         with step("Create a new issue with all required fields"):
+            request.node.created_issue_key = None
+
             self.pages.dashboard_page.click_create()
 
             create_issue_page = self.pages.create_issue_page
