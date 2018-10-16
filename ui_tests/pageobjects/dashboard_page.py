@@ -30,3 +30,6 @@ class DashboardPage(BasePage):
 
     def click_create(self):
         self.create_button.click()
+
+    def get_created_issue_key(self):
+        return self.issue_created_message.split()[1]

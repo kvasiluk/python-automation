@@ -102,6 +102,14 @@ def clean_issues():
 
 
 @pytest.fixture()
+def delete_issue_after_create(request):
+    yield
+
+    set_auth_cookie()
+    http.delete("rest/api/2/issue/%s" % request.node.created_issue_key)
+
+
+@pytest.fixture()
 def create_issue_for_update():
     """Creates a new issue at setup, yields its key, deletes issue on teardown"""
 

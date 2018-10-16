@@ -10,11 +10,11 @@ step = allure.step
 @allure.feature("Create issue")
 class TestCreateIssue(BaseTest):
     @pytest.mark.ui
-    @pytest.mark.usefixtures("login", "clean_issues")
+    @pytest.mark.usefixtures("login", "delete_issue_after_create")
     @pytest.mark.parametrize("summary,description,issue_type", [
         (summary_short, description_short, 'Bug'),
     ])
-    def test_create_issue(self, summary, description, issue_type):
+    def test_create_issue(self, summary, description, issue_type, request):
         with step("Create a new issue with all required fields"):
             self.pages.dashboard_page.click_create()
 
@@ -23,6 +23,8 @@ class TestCreateIssue(BaseTest):
             create_issue_page.create_issue(issue_type, summary, description)
 
             assert "successfully created" in self.pages.dashboard_page.issue_created_message, "Issue creation failed"
+
+            request.node.created_issue_key = self.pages.dashboard_page.get_created_issue_key()
 
     @pytest.mark.ui
     @pytest.mark.usefixtures("login")
