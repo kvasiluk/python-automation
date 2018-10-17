@@ -6,6 +6,8 @@ from ui_tests.pageobjects.base_page import BasePage
 from utils.config import Config
 
 # Locators
+from utils.reporting import screenshot
+
 issue_items = (By.CSS_SELECTOR, ".search-results li")
 no_results_message = (By.CSS_SELECTOR, ".no-results-message")
 
@@ -33,6 +35,7 @@ class SearchResultsPage(BasePage):
         if not self.is_no_issues_found():
             wait.until(ec.presence_of_all_elements_located(issue_items))
 
+    @screenshot
     def validate_results(self, results=None):
         if results:
             return self.result_count == results

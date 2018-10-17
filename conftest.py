@@ -12,7 +12,7 @@ from utils.config import Config
 http = BaseHttp()
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture()
 def up_browser(request):
     """ SetUp/TearDown selenium driver """
 
@@ -66,22 +66,28 @@ def driver(request, up_browser):
     return d
 
 
-@pytest.fixture()
+@pytest.fixture(scope="session")
 def create_issues():
     """Create 10 issues"""
+    issue_keys = []
 
     set_auth_cookie()
 
     for i in range(5):
         issue_data = create_issue_json(random_string(10), Config.search_string_1, 'Bug')
-        http.post(Config.issue_url, json.dumps(issue_data))
+        issue_keys.append(http.post(Config.issue_url, json.dumps(issue_data)).json()["key"])
 
     for i in range(4):
         issue_data = create_issue_json(random_string(10), random_string(20), 'Bug')
-        http.post(Config.issue_url, json.dumps(issue_data))
+        issue_keys.append(http.post(Config.issue_url, json.dumps(issue_data)).json()["key"])
 
     issue_data = create_issue_json(random_string(10), Config.search_string_2, 'Bug')
-    http.post(Config.issue_url, json.dumps(issue_data))
+    issue_keys.append(http.post(Config.issue_url, json.dumps(issue_data)).json()["key"])
+
+    yield
+
+    for issue_key in issue_keys:
+        http.delete("rest/api/2/issue/%s" % issue_key)
 
 
 @pytest.fixture()
@@ -93,6 +99,17 @@ def clean_issues():
     search_resp = http.get(Config.search_url + search_jql)
     for issue in search_resp.json()["issues"]:
         http.delete("rest/api/2/issue/%s" % issue["key"])
+
+
+@pytest.fixture()
+def delete_issue_after_create(request):
+    yield
+
+    if not request.node.created_issue_key:
+        return
+
+    set_auth_cookie()
+    http.delete("rest/api/2/issue/%s" % request.node.created_issue_key)
 
 
 @pytest.fixture()

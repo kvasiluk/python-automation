@@ -21,24 +21,28 @@ jobs:
             . venv/bin/activate
             pip install -r requirements.txt
 
+      - run:
+          name: install allure
+          command: |
+            echo 'deb http://deb.debian.org/debian jessie-backports main' | sudo tee --append /etc/apt/sources.list.d/jessie-backports.list
+            sudo apt update -y
+            sudo apt install --target-release jessie-backports openjdk-8-jre-headless ca-certificates-java -y
+
+            curl -o ~/allure-2.6.0.tgz -Ls https://dl.bintray.com/qameta/generic/io/qameta/allure/allure/2.6.0/allure-2.6.0.tgz
+            sudo tar -zxvf ~/allure-2.6.0.tgz -C /opt/
+            sudo ln -s /opt/allure-2.6.0/bin/allure /usr/bin/allure
+
       - save_cache:
           paths:
             - ./venv
           key: v1-dependencies-{{ checksum "requirements.txt" }}
 
       - run:
-          name: prepare test data
-          command: |
-            . venv/bin/activate
-            python -m pytest -m clean
-            python -m pytest -m prepare
-          when: always
-
-      - run:
           name: run tests
           command: |
             . venv/bin/activate
-            python -m pytest ui_tests --ignore=ui_tests/test_prepare_data.py -n 4 --dist=loadfile --reruns 2 -v
+            python -m pytest ui_tests --ignore=ui_tests/test_prepare_data.py -n 4 --dist=loadfile --reruns 2 -v --alluredir=test_results/allure
+          when: always
 
       - run:
           name: clean test data
@@ -47,6 +51,12 @@ jobs:
             python -m pytest -m clean
           when: always
 
+      - run:
+          name: generate allure report
+          command: |
+            allure generate ./test_results/allure -o ./test_results/html_report
+          when: always
+
       - store_artifacts:
-          path: test-reports
-          destination: test-reports
+          path: test_results
+          destination: test_results

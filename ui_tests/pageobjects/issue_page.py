@@ -10,6 +10,8 @@ from ui_tests.pageobjects.base_page import BasePage
 from utils.config import Config
 
 # Locators
+from utils.reporting import screenshot
+
 issue_header = (By.CSS_SELECTOR, ".issue-header-content")
 summary_edit = (By.ID, "summary-val")
 priority_edit = (By.ID, "priority-val")
@@ -49,6 +51,7 @@ class IssuePage(BasePage):
         wait = WebDriverWait(field, 10)
         return wait.until(ec.presence_of_element_located(input_edit))
 
+    @screenshot
     def set_field(self, field, value):
         f = getattr(self, field, None)
         wait = WebDriverWait(f, 5)
