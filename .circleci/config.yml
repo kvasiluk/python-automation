@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: circleci/python:3.6.6-browsers
+      - image: circleci/python:3.6-browsers
 
     working_directory: ~/circleci-python-automation
 
@@ -46,12 +46,12 @@ jobs:
             python -m pytest ui_tests/test_empty.py --ignore=ui_tests/test_prepare_data.py -n 4 --dist=loadfile --reruns 2 -v --alluredir=test_results/allure
           when: always
 
-      - run:
-          name: clean test data
-          command: |
-            . venv/bin/activate
-            python -m pytest -m clean
-          when: always
+#      - run:
+#          name: clean test data
+#          command: |
+#            . venv/bin/activate
+#            python -m pytest -m clean
+#          when: always
 
       - run:
           name: generate allure report
