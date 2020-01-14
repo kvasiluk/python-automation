@@ -56,6 +56,7 @@ jobs:
       - run:
           name: generate allure report
           command: |
+            export PATH="$PATH:/opt/allure-2.13.0/bin"
             allure generate ./test_results/allure -o ./test_results/html_report
           when: always
 
