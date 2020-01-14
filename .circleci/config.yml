@@ -1,6 +1,5 @@
 version: 2.1
-orbs:
-  allure: ayte/allure@0.1.2
+
 jobs:
   build:
     docker:
@@ -22,6 +21,18 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
             pip install -r requirements.txt
+
+      - run:
+          name: install allure
+          command: |
+            sudo apt install software-properties-common
+            sudo apt-get update
+            sudo apt-get install -y default-jre
+            sudo curl -o allure-commandline-2.13.0.tgz -Ls http://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.13.0/allure-commandline-2.13.0.tgz
+            sudo tar -zxvf allure-commandline-2.13.0.tgz -C /opt/
+            sudo ln -s /opt/allure-commandline-2.13.0/bin/allure /usr/bin/allure
+            export PATH="$PATH:/opt/allure-2.13.0/bin"
+            allure --version
 
       - save_cache:
           paths:
