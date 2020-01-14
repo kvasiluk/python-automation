@@ -33,7 +33,8 @@ jobs:
             sudo curl -o allure-commandline-2.13.0.tgz -Ls http://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.13.0/allure-commandline-2.13.0.tgz
             sudo tar -zxvf allure-commandline-2.13.0.tgz -C /opt/
             sudo ln -s /opt/allure-commandline-2.13.0/bin/allure /usr/bin/allure
-            export PATH="$PATH:/opt/allure-2.13.0/bin"
+            $Env:Path += ";/opt/allure-2.13.0/bin"
+#            export PATH="$PATH:/opt/allure-2.13.0/bin"
             allure --version
 
       - save_cache:
@@ -58,7 +59,8 @@ jobs:
       - run:
           name: generate allure report
           command: |
-            export PATH="$PATH:/opt/allure-2.13.0/bin"
+            $Env:Path += ";/opt/allure-2.13.0/bin"
+#            export PATH="$PATH:/opt/allure-2.13.0/bin"
             allure generate ./test_results/allure -o ./test_results/html_report
           when: always
 
