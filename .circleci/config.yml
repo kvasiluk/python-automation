@@ -2,8 +2,8 @@ version: 2.1
 orbs:
   win: circleci/windows@2.2.0
 jobs:
-  executor: win/default
   build:
+    executor: win/default
 #    docker:
 #      - image: circleci/python:3.6-browsers
 
