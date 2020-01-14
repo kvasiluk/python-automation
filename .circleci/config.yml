@@ -27,10 +27,11 @@ jobs:
       - run:
           name: install allure
           command: |
+            $progressPreference = 'silentlyContinue'
             (new-object System.Net.WebClient).DownloadFile('http://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.13.0/allure-commandline-2.13.0.zip','C:\tmp\allure-commandline-2.13.0.zip')
             Expand-Archive C:\tmp\allure-commandline-2.13.0.zip -DestinationPath C:\tmp\allure
             C:\tmp\allure\bin\allure.bat
-            Env:Path += ";C:\tmp\allure\bin"
+            $Env:Path += ";C:\tmp\allure\bin"
             allure --version
 
       - save_cache:
