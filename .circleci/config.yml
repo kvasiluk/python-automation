@@ -27,6 +27,7 @@ jobs:
       - run:
           name: install allure
           command: |
+            Set-ExecutionPolicy RemoteSigned -scope CurrentUser
             iwr -useb get.scoop.sh | iex
             scoop install allure
             allure --version
