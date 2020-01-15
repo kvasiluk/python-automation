@@ -73,6 +73,12 @@ jobs:
 
     <<: *test_steps
 
+  build-macos:
+    macos:
+      xcode: "10.0.0"
+
+    <<: *test_steps
+
 workflows:
   version: 2
   multiple-env-test:
