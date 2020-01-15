@@ -59,16 +59,19 @@ test-steps: &test_steps
 orbs:
   win: circleci/windows@2.2.0
 
-jobs:
-  build-windows:
-    executor: win/default
+workflows:
+  version: 2
+  multiple-env-test:
+    jobs:
+      build-windows:
+        executor: win/default
 
-    <<: *test_steps
+        <<: *test_steps
 
-  build-unix:
-    docker:
-      - image: circleci/python:3.6-browsers
+      build-unix:
+        docker:
+          - image: circleci/python:3.6-browsers
 
-    working_directory: ~/circleci-python-automation
+        working_directory: ~/circleci-python-automation
 
-    <<: *test_steps
+        <<: *test_steps
