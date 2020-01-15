@@ -68,10 +68,10 @@ workflows:
 
         <<: *test_steps
 
-      build-unix:
-        docker:
-          - image: circleci/python:3.6-browsers
-
-        working_directory: ~/circleci-python-automation
-
-        <<: *test_steps
+#      build-unix:
+#        docker:
+#          - image: circleci/python:3.6-browsers
+#
+#        working_directory: ~/circleci-python-automation
+#
+#        <<: *test_steps
