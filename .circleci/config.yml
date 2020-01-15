@@ -1,6 +1,7 @@
 version: 2.1
 
-steps: &test_steps
+test-steps: &test_steps
+  steps:
       - checkout
 
       - restore_cache:
