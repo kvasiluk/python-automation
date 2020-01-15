@@ -1,15 +1,6 @@
 version: 2.1
-orbs:
-  win: circleci/windows@2.2.0
-jobs:
-  build:
-    executor: win/default
-#    docker:
-#      - image: circleci/python:3.6-browsers
 
-    working_directory: ~/circleci-python-automation
-
-    steps:
+steps: &test_steps
       - checkout
 
       - restore_cache:
@@ -24,16 +15,15 @@ jobs:
             . venv/bin/activate
             pip install -r requirements.txt
 
-      - run:
-          name: install allure
-          command: |
-            $progressPreference = 'silentlyContinue'
-            (new-object System.Net.WebClient).DownloadFile('http://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.13.0/allure-commandline-2.13.0.zip','C:\tmp\allure-commandline-2.13.0.zip')
-            Expand-Archive C:\tmp\allure-commandline-2.13.0.zip -DestinationPath C:\tmp\allure
-            cd C:\tmp\allure\bin\
-            allure.bat
-            $Env:Path += ";C:\tmp\allure\bin"
-            allure --version
+#      - run:
+#          name: install allure
+#          command: |
+#            (new-object System.Net.WebClient).DownloadFile('http://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.13.0/allure-commandline-2.13.0.zip','C:\tmp\allure-commandline-2.13.0.zip')
+#            Expand-Archive C:\tmp\allure-commandline-2.13.0.zip -DestinationPath C:\tmp\allure
+#            cd C:\tmp\allure\bin\
+#            allure.bat
+#            $Env:Path += ";C:\tmp\allure\bin"
+#            allure --version
 
       - save_cache:
           paths:
@@ -54,13 +44,30 @@ jobs:
 #            python -m pytest -m clean
 #          when: always
 
-      - run:
-          name: generate allure report
-          command: |
-            $Env:Path += ";/opt/allure-2.13.0/bin"
-            allure generate ./test_results/allure -o ./test_results/html_report
-          when: always
+#      - run:
+#          name: generate allure report
+#          command: |
+#            $Env:Path += ";/opt/allure-2.13.0/bin"
+#            allure generate ./test_results/allure -o ./test_results/html_report
+#          when: always
 
       - store_artifacts:
           path: test_results
           destination: test_results
+
+orbs:
+  win: circleci/windows@2.2.0
+
+jobs:
+  build-windows:
+    executor: win/default
+
+    <<: *test_steps
+
+  build-unix:
+    docker:
+      - image: circleci/python:3.6-browsers
+
+    working_directory: ~/circleci-python-automation
+
+    <<: *test_steps
