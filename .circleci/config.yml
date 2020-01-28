@@ -20,9 +20,8 @@ jobs:
           command: |
             conda remove anaconda
             conda update python
-            conda list --show-channel-urls | findstr python
             python -m venv venv
-            venv\bin\activate
+            venv\Scripts\activate.bat
             pip install -r requirements.txt
 
       #      - run:
@@ -117,7 +116,7 @@ jobs:
       - run:
           name: generate allure report
           command: |
-            $Env:Path += ";/opt/allure-2.13.0/bin"
+            export PATH="$PATH:/opt/allure-2.13.1/bin"
             allure generate ./test_results/allure -o ./test_results/html_report
           when: always
 
