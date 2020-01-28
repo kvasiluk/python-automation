@@ -122,17 +122,9 @@ jobs:
           path: test_results
           destination: test_results
 
-#  build-macos:
-#    macos:
-#      xcode: "10.0.0"
-#
-#    <<: *test_steps
-
 workflows:
   version: 2
   multiple-env-test:
     jobs:
       - build-windows
       - build-unix
-      - build-macos
-
