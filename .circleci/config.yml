@@ -13,6 +13,7 @@ jobs:
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "requirements.txt" }}
+            - v1-dependencies-
 
       - run:
           name: install dependencies
@@ -73,6 +74,7 @@ jobs:
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "requirements.txt" }}
+            - v1-dependencies-
 
       - run:
           name: install dependencies
@@ -81,14 +83,14 @@ jobs:
             . venv/bin/activate
             pip install -r requirements.txt
 
-        - run:
-            name: install allure
-            command: |
-              sudo curl -o allure-commandline-2.13.1.tgz -Ls https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.13.1/allure-commandline-2.13.1.tgz
-              sudo tar -zxvf allure-commandline-2.13.1.tgz -C /opt/
-              sudo ln -s /opt/allure-commandline-2.13.1/bin/allure /usr/bin/allure
-              export PATH="$PATH:/opt/allure-2.13.1/bin"
-              allure --version
+      - run:
+          name: install allure
+          command: |
+            sudo curl -o allure-commandline-2.13.1.tgz -Ls https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.13.1/allure-commandline-2.13.1.tgz
+            sudo tar -zxvf allure-commandline-2.13.1.tgz -C /opt/
+            sudo ln -s /opt/allure-commandline-2.13.1/bin/allure /usr/bin/allure
+            export PATH="$PATH:/opt/allure-2.13.1/bin"
+            allure --version
 
       - save_cache:
           paths:
