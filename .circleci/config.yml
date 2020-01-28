@@ -1,13 +1,80 @@
 version: 2.1
 
-test-steps: &test_steps
-  steps:
+orbs:
+  win: circleci/windows@2.2.0
+
+jobs:
+  build-windows:
+    executor: win/default
+
+    steps:
       - checkout
 
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "requirements.txt" }}
-          - v1-dependencies-
+            - v1-dependencies-{{ checksum "requirements.txt" }}
+            - v1-dependencies-
+
+      - run:
+          name: install dependencies
+          command: |
+            python -m venv venv
+            venv\bin\activate
+            pip install -r requirements.txt
+
+      #      - run:
+      #          name: install allure
+      #          command: |
+      #            (new-object System.Net.WebClient).DownloadFile('http://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.13.0/allure-commandline-2.13.0.zip','C:\tmp\allure-commandline-2.13.0.zip')
+      #            Expand-Archive C:\tmp\allure-commandline-2.13.0.zip -DestinationPath C:\tmp\allure
+      #            cd C:\tmp\allure\bin\
+      #            allure.bat
+      #            $Env:Path += ";C:\tmp\allure\bin"
+      #            allure --version
+
+      - save_cache:
+          paths:
+            - ./venv
+          key: v1-dependencies-{{ checksum "requirements.txt" }}
+
+      - run:
+          name: run tests
+          command: |
+            venv\bin\activate
+            python -m pytest ui_tests/test_empty.py --ignore=ui_tests/test_prepare_data.py -n 4 --dist=loadfile --reruns 2 -v --alluredir=test_results/allure
+          when: always
+
+      #      - run:
+      #          name: clean test data
+      #          command: |
+      #            . venv/bin/activate
+      #            python -m pytest -m clean
+      #          when: always
+
+      #      - run:
+      #          name: generate allure report
+      #          command: |
+      #            $Env:Path += ";/opt/allure-2.13.0/bin"
+      #            allure generate ./test_results/allure -o ./test_results/html_report
+      #          when: always
+
+      - store_artifacts:
+          path: test_results
+          destination: test_results
+
+  build-unix:
+    docker:
+      - image: circleci/python:3.6-browsers
+
+    working_directory: ~/circleci-python-automation
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "requirements.txt" }}
+            - v1-dependencies-
 
       - run:
           name: install dependencies
@@ -16,15 +83,14 @@ test-steps: &test_steps
             . venv/bin/activate
             pip install -r requirements.txt
 
-#      - run:
-#          name: install allure
-#          command: |
-#            (new-object System.Net.WebClient).DownloadFile('http://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.13.0/allure-commandline-2.13.0.zip','C:\tmp\allure-commandline-2.13.0.zip')
-#            Expand-Archive C:\tmp\allure-commandline-2.13.0.zip -DestinationPath C:\tmp\allure
-#            cd C:\tmp\allure\bin\
-#            allure.bat
-#            $Env:Path += ";C:\tmp\allure\bin"
-#            allure --version
+        - run:
+            name: install allure
+            command: |
+              sudo curl -o allure-commandline-2.13.1.tgz -Ls https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.13.1/allure-commandline-2.13.1.tgz
+              sudo tar -zxvf allure-commandline-2.13.1.tgz -C /opt/
+              sudo ln -s /opt/allure-commandline-2.13.1/bin/allure /usr/bin/allure
+              export PATH="$PATH:/opt/allure-2.13.1/bin"
+              allure --version
 
       - save_cache:
           paths:
@@ -38,46 +104,29 @@ test-steps: &test_steps
             python -m pytest ui_tests/test_empty.py --ignore=ui_tests/test_prepare_data.py -n 4 --dist=loadfile --reruns 2 -v --alluredir=test_results/allure
           when: always
 
-#      - run:
-#          name: clean test data
-#          command: |
-#            . venv/bin/activate
-#            python -m pytest -m clean
-#          when: always
+      - run:
+          name: clean test data
+          command: |
+            . venv/bin/activate
+            python -m pytest -m clean
+          when: always
 
-#      - run:
-#          name: generate allure report
-#          command: |
-#            $Env:Path += ";/opt/allure-2.13.0/bin"
-#            allure generate ./test_results/allure -o ./test_results/html_report
-#          when: always
+      - run:
+          name: generate allure report
+          command: |
+            $Env:Path += ";/opt/allure-2.13.0/bin"
+            allure generate ./test_results/allure -o ./test_results/html_report
+          when: always
 
       - store_artifacts:
           path: test_results
           destination: test_results
 
-orbs:
-  win: circleci/windows@2.2.0
-
-jobs:
-  build-windows:
-    executor: win/default
-
-    <<: *test_steps
-
-  build-unix:
-    docker:
-      - image: circleci/python:3.6-browsers
-
-    working_directory: ~/circleci-python-automation
-
-    <<: *test_steps
-
-  build-macos:
-    macos:
-      xcode: "10.0.0"
-
-    <<: *test_steps
+#  build-macos:
+#    macos:
+#      xcode: "10.0.0"
+#
+#    <<: *test_steps
 
 workflows:
   version: 2
