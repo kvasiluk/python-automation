@@ -18,7 +18,9 @@ jobs:
       - run:
           name: install dependencies
           command: |
+            conda remove anaconda
             conda update python
+            conda list --show-channel-urls | findstr python
             python -m venv venv
             venv\bin\activate
             pip install -r requirements.txt
